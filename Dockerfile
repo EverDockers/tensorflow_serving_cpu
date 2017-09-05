@@ -69,11 +69,11 @@ RUN apt-get update && \
     # Python Configuration Error: 'PYTHON_BIN_PATH' environment variable is not set
     # <https://github.com/tensorflow/tensorflow/issues/9436>
     # Since use /bin/sh, should follow the UNIX export command <https://stackoverflow.com/questions/7328223/unix-export-command>
-    PYTHON_BIN_PATH=/usr/bin/python3 && \
+    PYTHON_BIN_PATH = /usr/bin/python3 && \
     export PYTHON_BIN_PATH && \
-    PYTHON_LIB_PATH=/usr/local/lib/python3.5/dist-packages && \
+    PYTHON_LIB_PATH = /usr/local/lib/python3.5/dist-packages && \
     export PYTHON_LIB_PATH && \
-    git clone --recurse-submodules https://github.com/tensorflow/serving && \
+    git clone -b 1.0.0 --recurse-submodules https://github.com/tensorflow/serving && \
     # remove repository meta and index
     rm -r serving/.git && \
     # configurate original tensorflow
