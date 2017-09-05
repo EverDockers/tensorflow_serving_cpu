@@ -41,11 +41,11 @@ RUN apt-get update && \
         && \
     # pip
     pip3 install --no-cache-dir --upgrade pip && \
-    # Set up grpc
-    pip3 install --no-cache-dir install mock grpcio && \
     # For convenience, alisas (but don't sym-link) python & pip to python3 & pip3 as recommended in:
     echo "alias python='python3'" >> /root/.bash_aliases && \
     echo "alias pip='pip3'" >> /root/.bash_aliases && \
+    # Set up grpc
+    pip3 install --no-cache-dir mock grpcio && \
     #
     # Clean up
     #
@@ -76,9 +76,10 @@ RUN apt-get update && \
     # build entire serving tree
     bazel build -c opt //tensorflow_serving/... && \
     # client deployment directory
+    cd / && \
     mkdir /client
 
 
-WORKDIR /serving/
+WORKDIR /serving
 
 CMD ["/bin/bash"]
