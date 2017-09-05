@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Set up Bazel.
 ENV BAZELRC /root/.bazelrc
 # Install the most recent bazel release.
-ENV BAZEL_VERSION 0.5.1
+ENV BAZEL_VERSION 0.5.4
 # Serving port
 ENV SERVING_PORT 9000
 # Client port
@@ -45,7 +45,9 @@ RUN apt-get update && \
     echo "alias python='python3'" >> /root/.bash_aliases && \
     echo "alias pip='pip3'" >> /root/.bash_aliases && \
     # Set up grpc
-    pip3 install --no-cache-dir mock grpcio && \
+    pip3 install --no-cache-dir mock grpcio \
+        # TensorFlow Serving Python API PIP package
+        tensorflow-serving-api && \
     #
     # Clean up
     #
@@ -69,11 +71,11 @@ RUN apt-get update && \
     # Python Configuration Error: 'PYTHON_BIN_PATH' environment variable is not set
     # <https://github.com/tensorflow/tensorflow/issues/9436>
     # Since use /bin/sh, should follow the UNIX export command <https://stackoverflow.com/questions/7328223/unix-export-command>
-    PYTHON_BIN_PATH = /usr/bin/python3 && \
+    PYTHON_BIN_PATH=/usr/bin/python3 && \
     export PYTHON_BIN_PATH && \
-    PYTHON_LIB_PATH = /usr/local/lib/python3.5/dist-packages && \
+    PYTHON_LIB_PATH=/usr/local/lib/python3.5/dist-packages && \
     export PYTHON_LIB_PATH && \
-    git clone -b 1.0.0 --recurse-submodules https://github.com/tensorflow/serving && \
+    git clone --recurse-submodules https://github.com/tensorflow/serving && \
     # remove repository meta and index
     rm -r serving/.git && \
     # configurate original tensorflow
