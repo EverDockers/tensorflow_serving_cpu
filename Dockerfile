@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Set up Bazel.
 ENV BAZELRC /root/.bazelrc
 # Install the most recent bazel release.
-ENV BAZEL_VERSION 0.5.4
+ENV BAZEL_VERSION 0.5.1
 # Serving port
 ENV SERVING_PORT 9000
 # Client port
@@ -71,6 +71,8 @@ RUN apt-get update && \
     # Since use /bin/sh, should follow the UNIX export command <https://stackoverflow.com/questions/7328223/unix-export-command>
     PYTHON_BIN_PATH=/usr/bin/python3 && \
     export PYTHON_BIN_PATH && \
+    PYTHON_LIB_PATH=/usr/local/lib/python3.5/dist-packages && \
+    export PYTHON_LIB_PATH && \
     git clone --recurse-submodules https://github.com/tensorflow/serving && \
     # remove repository meta and index
     rm -r serving/.git && \
