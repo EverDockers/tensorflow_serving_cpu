@@ -22,32 +22,27 @@ RUN apt-get update && \
     #
     apt-get install -y --no-install-recommends \
         # Build tools
-        build-essential \
+        build-essential g++ \
         # Developer Essentials
         curl git wget zip unzip \
         libfreetype6-dev \
         libpng12-dev \
         libzmq3-dev \
-        mlocate \
         pkg-config \
         # Python 3.5
         python3.5 python3.5-dev python3-numpy python3-pip \
+        # python 2.7
+        python-dev python-numpy python-pip \
         software-properties-common \
         swig \
         zlib1g-dev \
-        libcurl3-dev \
-        openjdk-8-jdk\
-        openjdk-8-jre-headless \
-        && \
+        libcurl3-dev && \
     # pip
     pip3 install --no-cache-dir --upgrade pip && \
-    # For convenience, alisas (but don't sym-link) python & pip to python3 & pip3 as recommended in:
-    echo "alias python='python3'" >> /root/.bash_aliases && \
-    echo "alias pip='pip3'" >> /root/.bash_aliases && \
     # Set up grpc
-    pip3 install --no-cache-dir mock grpcio \
+    pip3 install --no-cache-dir grpcio && \
         # TensorFlow Serving Python API PIP package
-        tensorflow-serving-api && \
+    pip install tensorflow-serving-api && \
     #
     # Clean up
     #
