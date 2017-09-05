@@ -11,13 +11,10 @@ ENV BAZEL_VERSION 0.5.4
 # Serving port
 ENV SERVING_PORT 9000
 # Client port
-ENV Client_PORT 8080
+ENV CLIENT_PORT 8080
 
-# Serving port
-EXPOSE $SERVING_PORT
-# Client port
-EXPOSE $CLIENT_PORT
-
+# Serving port & client port
+EXPOSE $SERVING_PORT $CLIENT_PORT
 
 RUN apt-get update && \
     #
@@ -77,7 +74,7 @@ RUN apt-get update && \
     ./configure && \
     cd .. && \
     # build entire serving tree
-    bazel build -c opt tensorflow_serving/... && \
+    bazel build -c opt //tensorflow_serving/... && \
     # client deployment directory
     mkdir /client
 
