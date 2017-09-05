@@ -37,7 +37,6 @@ docker run -it -v serving:/serving \
  baikangwang/tensorflow_serving_cpu /bin/bash
 ```
 
-
 > `<client>`: it's placeholder presenting the client code directory which must contains BUILD file  
 > `<[x_]container_name>`: it's placeholder presenting the container name  
 > `9000:9000`: the serving service port, the server part is configurable with the evn variable `$SERVING_PORT`    
@@ -69,7 +68,8 @@ bazel test -c opt tensorflow_serving/...
 
 1. BUILD file
 
-    here is a template
+    the BUILD is configuration file for building the client code by Bazel, which is required and should be put at
+    the root directory of the client code. Here is a template,
     
     ```BUILD
     # mnist bazel build file
