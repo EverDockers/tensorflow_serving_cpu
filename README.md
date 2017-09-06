@@ -94,10 +94,20 @@ docker run -it -v /MNIST:/client --name ts_client baikangwang/tensorflow_serving
 tensorflow_model_server --port=9000 --model_name="mnist" --model_base_path="/client/models/"
 ```
 
+![ts_server_example](ts_server_example.png)
+
 > Client
 
 ```bash
-python2 /client/mnist_predict.py --num_tests=1000 --server=localhost:9000 --data_dir=/client/input_data
+# Mac
+# https://docs.docker.com/docker-for-mac/networking/#known-limitations-use-cases-and-workarounds
+python2 /client/mnist_predict.py --num_tests=1000 --server=docker.for.mac.localhost:9000 --data_dir=/client/input_data
+
+# linux
+# https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach
+python2 /client/mnist_predict.py --num_tests=1000 --net="host" --server=localhost:9000 --data_dir=/client/input_data
 ```
+
+![ts_client_example](ts_client_example.png)
 
 
