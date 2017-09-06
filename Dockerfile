@@ -52,6 +52,11 @@ RUN apt update && \
     pip3 install --no-cache-dir --upgrade pip \
      # Fix No module named pkg_resources
      setuptools && \
+    #
+    # Tensorflow 1.3.0 - CPU
+    #
+    pip install --no-cache-dir --upgrade tensorflow && \
+    pip3 install --no-cache-dir --upgrade tensorflow && \
     # For convenience, alisas (but don't sym-link) python & pip to python3 & pip3 as recommended in:
     # http://askubuntu.com/questions/351318/changing-symlink-python-to-python3-causes-problems
     echo "alias python='python3'" >> /root/.bash_aliases && \
