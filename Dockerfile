@@ -42,12 +42,17 @@ RUN apt-get update && \
         libcurl3-dev && \
 
     # pip
-    pip install --no-cache-dir --upgrade pip setuptools && \
+    pip install --no-cache-dir --upgrade pip \
+     # Fix No module named pkg_resources
+     setuptools && \
     # Grpc
     pip install --no-cache-dir mock grpcio \
     # TensorFlow Serving Python API PIP package
      tensorflow-serving-api && \
-    pip3 install --no-cache-dir --upgrade pip setuptools && \
+    # grpc still dosen't support python3, hance won't install it
+    pip3 install --no-cache-dir --upgrade pip \
+     # Fix No module named pkg_resources
+     setuptools && \
     # For convenience, alisas (but don't sym-link) python & pip to python3 & pip3 as recommended in:
     # http://askubuntu.com/questions/351318/changing-symlink-python-to-python3-causes-problems
     echo "alias python='python3'" >> /root/.bash_aliases && \
@@ -70,7 +75,7 @@ RUN apt-get update && \
     cd / && \
     rm -f /bazel/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
     #
-    # Install Tensorflow serving
+    # Install Tensorflow serving 1.3.0
     #
     # Python Configuration Error: 'PYTHON_BIN_PATH' environment variable is not set
     # <https://github.com/tensorflow/tensorflow/issues/9436>
@@ -82,6 +87,9 @@ RUN apt-get update && \
     git clone --recurse-submodules https://github.com/tensorflow/serving && \
     # remove repository meta and index
     rm -r serving/.git && \
+    rm -r serving/tensorlfow/.git && \
+    rm -r serving/tf_models/.git && \
+    rm -r serving/tf_models/syntaxnet/tensorflow/.git && \
     # configurate original tensorflow
     cd serving/tensorflow && \
     ./configure && \
