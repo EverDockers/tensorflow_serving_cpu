@@ -87,7 +87,7 @@ RUN apt-get update && \
     git clone --recurse-submodules https://github.com/tensorflow/serving && \
     # remove repository meta and index
     rm -r serving/.git && \
-    rm -r serving/tensorlfow/.git && \
+    rm -r serving/tensorflow/.git && \
     rm -r serving/tf_models/.git && \
     rm -r serving/tf_models/syntaxnet/tensorflow/.git && \
     # configurate original tensorflow
