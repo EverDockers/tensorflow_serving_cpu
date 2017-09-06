@@ -9,6 +9,7 @@ official introduce: <https://www.tensorflow.org/serving/>
 * Bazel 0.5.4
 * grpc
 * Python 3.5
+* python 2.7
 * Tensorflow Serving
 
 ## Usage

@@ -29,20 +29,22 @@ RUN apt-get update && \
         libpng12-dev \
         libzmq3-dev \
         pkg-config \
+        #
+        # Python 2.7
+        # Tensorflow serving still relies on python2
+        #
+        python2.7 python-dev python-numpy python-pip \
         # Python 3.5
         python3.5 python3.5-dev python3-numpy python3-pip \
-        # python 2.7
-        python-dev python-numpy python-pip \
         software-properties-common \
         swig \
         zlib1g-dev \
         libcurl3-dev && \
     # pip
     pip3 install --no-cache-dir --upgrade pip && \
-    # Set up grpc
-    pip3 install --no-cache-dir grpcio && \
-        # TensorFlow Serving Python API PIP package
-    pip install tensorflow-serving-api && \
+    # TensorFlow Serving Python API PIP package
+    pip2 install --no-cache-dir --upgrade pip && \
+    pip2 install --no-cache-dir mock grpcio tensorflow-serving-api && \
     #
     # Clean up
     #
@@ -66,10 +68,10 @@ RUN apt-get update && \
     # Python Configuration Error: 'PYTHON_BIN_PATH' environment variable is not set
     # <https://github.com/tensorflow/tensorflow/issues/9436>
     # Since use /bin/sh, should follow the UNIX export command <https://stackoverflow.com/questions/7328223/unix-export-command>
-    PYTHON_BIN_PATH=/usr/bin/python3 && \
-    export PYTHON_BIN_PATH && \
-    PYTHON_LIB_PATH=/usr/local/lib/python3.5/dist-packages && \
-    export PYTHON_LIB_PATH && \
+    # PYTHON_BIN_PATH=/usr/bin/python3 && \
+    # export PYTHON_BIN_PATH && \
+    # PYTHON_LIB_PATH=/usr/local/lib/python3.5/dist-packages && \
+    # export PYTHON_LIB_PATH && \
     git clone --recurse-submodules https://github.com/tensorflow/serving && \
     # remove repository meta and index
     rm -r serving/.git && \
