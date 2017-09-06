@@ -16,11 +16,11 @@ ENV CLIENT_PORT 8080
 # Serving port & client port
 EXPOSE $SERVING_PORT $CLIENT_PORT
 
-RUN apt-get update && \
+RUN apt update && \
     #
     # Prerequisites
     #
-    apt-get install -y --no-install-recommends \
+    apt install -y --no-install-recommends \
         # Build tools
         build-essential g++ \
         # Developer Essentials
@@ -40,7 +40,6 @@ RUN apt-get update && \
         swig \
         zlib1g-dev \
         libcurl3-dev && \
-
     # pip
     pip install --no-cache-dir --upgrade pip \
      # Fix No module named pkg_resources
@@ -77,30 +76,23 @@ RUN apt-get update && \
     #
     # Install Tensorflow serving 1.3.0
     #
-    # Python Configuration Error: 'PYTHON_BIN_PATH' environment variable is not set
-    # <https://github.com/tensorflow/tensorflow/issues/9436>
-    # Since use /bin/sh, should follow the UNIX export command <https://stackoverflow.com/questions/7328223/unix-export-command>
-    # PYTHON_BIN_PATH=/usr/bin/python3 && \
-    # export PYTHON_BIN_PATH && \
-    # PYTHON_LIB_PATH=/usr/local/lib/python3.5/dist-packages && \
-    # export PYTHON_LIB_PATH && \
-    git clone --recurse-submodules https://github.com/tensorflow/serving && \
-    # remove repository meta and index
-    rm -r serving/.git && \
-    rm -r serving/tensorflow/.git && \
-    rm -r serving/tf_models/.git && \
-    rm -r serving/tf_models/syntaxnet/tensorflow/.git && \
-    # configurate original tensorflow
-    cd serving/tensorflow && \
-    ./configure && \
-    cd .. && \
-    # build entire serving tree
-    bazel build -c opt //tensorflow_serving/... && \
+    # Install using apt-get
+    # remove the old version
+    apt remove tensorflow-model-server && \
+    echo "deb [arch=amd64] http://storage.googleapis.com/tensorflow-serving-apt stable tensorflow-model-server tensorflow-model-server-universal" | sudo tee /etc/apt/sources.list.d/tensorflow-serving.list && \
+    curl https://storage.googleapis.com/tensorflow-serving-apt/tensorflow-serving.release.pub.gpg | sudo apt-key add - && \
+    apt update && apt install tensorflow-model-server && \
+    apt upgrade tensorflow-model-server && \
+    #
+    # Clean up
+    #
+    apt-get clean && \
+    apt autoremove && \
+    rm -rf /var/lib/apt/lists/* && \
     # client deployment directory
     cd / && \
     mkdir /client
 
-
-WORKDIR /serving
+WORKDIR /
 
 CMD ["/bin/bash"]
