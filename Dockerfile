@@ -34,8 +34,6 @@ RUN apt update && \
         # Tensorflow serving still relies on python2, exactly it's that GRPC still dosen't supprt python3
         #
         python2.7 python-dev python-numpy python-pip \
-        # Python 3.5
-        python3.5 python3.5-dev python3-numpy python3-pip \
         software-properties-common \
         swig \
         zlib1g-dev \
@@ -48,19 +46,10 @@ RUN apt update && \
     pip install --no-cache-dir mock grpcio \
     # TensorFlow Serving Python API PIP package
      tensorflow-serving-api && \
-    # grpc still dosen't support python3, hance won't install it
-    pip3 install --no-cache-dir --upgrade pip \
-     # Fix No module named pkg_resources
-     setuptools && \
     #
     # Tensorflow 1.3.0 - CPU
     #
     pip install --no-cache-dir --upgrade tensorflow && \
-    pip3 install --no-cache-dir --upgrade tensorflow && \
-    # For convenience, alisas (but don't sym-link) python & pip to python3 & pip3 as recommended in:
-    # http://askubuntu.com/questions/351318/changing-symlink-python-to-python3-causes-problems
-    echo "alias python='python3'" >> /root/.bash_aliases && \
-    echo "alias pip='pip3'" >> /root/.bash_aliases && \
     #
     # Clean up
     #
