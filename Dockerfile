@@ -4,10 +4,6 @@ MAINTAINER Baker Wang <baikangwang@hotmail.com>
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Set up Bazel.
-ENV BAZELRC /root/.bazelrc
-# Install the most recent bazel release.
-ENV BAZEL_VERSION 0.5.4
 # Serving port
 ENV SERVING_PORT 9000
 # Client port
@@ -36,7 +32,6 @@ RUN apt update && \
         zlib1g-dev \
         libcurl3-dev && \
     # pip
-    # grpc still dosen't support python3, hance won't install it
     pip3 install --no-cache-dir --upgrade pip \
      # Fix No module named pkg_resources
      setuptools && \
@@ -58,17 +53,6 @@ RUN apt update && \
     apt autoremove && \
     rm -rf /var/lib/apt/lists/* && \
     #
-    # Set up Bazel
-    #
-    mkdir /bazel && \
-    cd /bazel && \
-    curl -fSsL -O https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
-    curl -fSsL -o /bazel/LICENSE.txt https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE && \
-    chmod +x bazel-*.sh && \
-    ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
-    cd / && \
-    rm -f /bazel/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
-    #
     # Install Tensorflow serving 1.3.0
     #
     # Install using apt-get
@@ -85,6 +69,12 @@ RUN apt update && \
     # client deployment directory
     cd / && \
     mkdir /client
+
+#
+# tensorflow-serving-api
+# just copy the built files of python2 to python3.5 packages since there hasn't been official package supporting python3
+#
+COPY tensorflow_serving_api-1.3.0 /usr/local/lib/python3.5/dist-packages/
 
 WORKDIR /
 
