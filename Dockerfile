@@ -2,12 +2,6 @@ FROM ubuntu:16.04
 
 MAINTAINER Baker Wang <baikangwang@hotmail.com>
 
-ARG DEBIAN_FRONTEND=noninteractive
-
-# Set up Bazel.
-ENV BAZELRC /root/.bazelrc
-# Install the most recent bazel release.
-ENV BAZEL_VERSION 0.5.4
 # Serving port
 ENV SERVING_PORT 9000
 # Client port
@@ -56,17 +50,6 @@ RUN apt update && \
     apt-get clean && \
     apt autoremove && \
     rm -rf /var/lib/apt/lists/* && \
-    #
-    # Set up Bazel
-    #
-    mkdir /bazel && \
-    cd /bazel && \
-    curl -fSsL -O https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
-    curl -fSsL -o /bazel/LICENSE.txt https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE && \
-    chmod +x bazel-*.sh && \
-    ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
-    cd / && \
-    rm -f /bazel/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh && \
     #
     # Install Tensorflow serving 1.3.0
     #
