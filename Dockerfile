@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM baikangwang/tensorflow_cpu:tfonly_py2
 
 MAINTAINER Baker Wang <baikangwang@hotmail.com>
 
@@ -23,33 +23,15 @@ RUN apt update && \
         libpng12-dev \
         libzmq3-dev \
         pkg-config \
-        #
-        # Python 2.7
-        # Tensorflow serving still relies on python2, exactly it's that GRPC still dosen't supprt python3
-        #
-        python2.7 python-dev python-numpy python-pip \
+        python-numpy \
         software-properties-common \
         swig \
         zlib1g-dev \
         libcurl3-dev && \
-    # pip
-    pip install --no-cache-dir --upgrade pip \
-     # Fix No module named pkg_resources
-     setuptools && \
     # Grpc
     pip install --no-cache-dir mock grpcio \
     # TensorFlow Serving Python API PIP package
      tensorflow-serving-api && \
-    #
-    # Tensorflow 1.3.0 - CPU
-    #
-    pip install --no-cache-dir --upgrade tensorflow && \
-    #
-    # Clean up
-    #
-    apt-get clean && \
-    apt autoremove && \
-    rm -rf /var/lib/apt/lists/* && \
     #
     # Install Tensorflow serving 1.3.0
     #
@@ -63,11 +45,6 @@ RUN apt update && \
     #
     apt-get clean && \
     apt autoremove && \
-    rm -rf /var/lib/apt/lists/* && \
-    # client deployment directory
-    cd / && \
-    mkdir /client
-
-WORKDIR /
+    rm -rf /var/lib/apt/lists/*
 
 CMD ["/bin/bash"]
