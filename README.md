@@ -1,113 +1,87 @@
 # Tensorflow serving (cpu)
 
-official introduce: <https://www.tensorflow.org/serving/>
+* repository
+    * [`baikangwang/tensorflow_serving_cpu`](https://hub.docker.com/r/baikangwang/tensorflow_serving_cpu/)
+* tags
+    * [`3.5`,`latest`](#35latest)
+    * [`2.7`](#27)
+    
+## `3.5`,`latest`    
+    
+### Description
 
-![regular](ts_intro.png)
+This image can be used as tensorflow serving server and client in __python 3.5__
 
-## Component
+|Docker||
+|:---|:---|
+|__Docker Pull__|`docker pull baikangwang/tensorflow_serving_cpu[:3.5]`|
+|__Dockerfile__|<https://github.com/EverDockers/tensorflow_serving_cpu/blob/python3/Dockerfile>|
 
-* Bazel 0.5.4
-* grpc 1.6.0
-* Python 3.5
-* Python 2.7
-* Tensorflow 1.3.0
-* Tensorflow Serving 1.3.0
-
-## Usage
+### Usage
 
 > Tensorflow Serving - Server
 ```bash
-docker run -it -v <client>:/client -p 9000:9000 --name <ts_server> baikangwang/tensorflow_serving_cpu /bin/bash 
+nvidia-docker run -it -v <local working dir>:/projects -p 9000:9000 --name <ts_server> baikangwang/tensorflow_serving_cpu[:3.5] /bin/bash 
 ```
 > Tensorflow Serving - Client
 
 ```bash
 # console, desktop program
-docker run -it -v <client>:/client --name <ts_client> baikangwang/tensorflow_serving_cpu /bin/bash
+nvidia-docker run -it -v <local working dir>:/projects --net=host --name <ts_client> baikangwang/tensorflow_serving_cpu[:3.5] /bin/bash
  
 # web app
-docker run -it -v <client>:/client -p 8080:8080 --name <ts_client> baikangwang/tensorflow_serving_cpu /bin/bash
+nvidia-docker run -it -v <local working dir>:/projects --net=host -p 8080:8080 --name <ts_client> baikangwang/tensorflow_serving_cpu[:3.5] /bin/bash
 ```
 
-> `<client>`: it's a placeholder presenting the client code directory  
+> `<local working dir>`: it's a placeholder presenting the client code directory  
 > `<ts_server>`: it's a placeholder presenting the container name being played as _SERVER_ role  
 > `<ts_client>`: it's a placeholder presenting the container name being played as _CLIENT_ role  
 > `9000:9000`: the serving service port, the server part is configurable with the evn variable `$SERVING_PORT`  
 > `8080:8080`: the client app port which is optional for console, desktop programs, the server part is configurable with the evn variable `$CLIENT_PORT`  
 
+### Components
+
+* grpc 1.6.0
+* Python 3.5
+* Tensorflow 1.3.0
+* Tensorflow Serving 1.3.0
+
+## `2.7`    
+    
+### Description
+
+This image can be used as tensorflow serving server and client in __python 2.7__
+
+|Docker||
+|:---|:---|
+|__Docker Pull__|`docker pull baikangwang/tensorflow_serving_cpu:2.7]`|
+|__Dockerfile__|<https://github.com/EverDockers/tensorflow_serving_cpu/blob/python2/Dockerfile>|
+
+### Usage
+
+> Tensorflow Serving - Server
+```bash
+nvidia-docker run -it -v <local working dir>:/projects -p 9000:9000 --name <ts_server> baikangwang/tensorflow_serving_cpu:2.7 /bin/bash 
+```
+> Tensorflow Serving - Client
+
+```bash
+# console, desktop program
+nvidia-docker run -it -v <local working dir>:/projects --net=host --name <ts_client> baikangwang/tensorflow_serving_cpu:2.7 /bin/bash
+ 
+# web app
+nvidia-docker run -it -v <local working dir>:/projects --net=host -p 8080:8080 --name <ts_client> baikangwang/tensorflow_serving_cpu:2.7 /bin/bash
+```
+
+> Parameters see [`3.5`,`latest`](#35latest)
+
+### Components
+
+* grpc 1.6.0
+* Python 2.7
+* Tensorflow 1.3.0
+* Tensorflow Serving 1.3.0
+
 ## Tensorflow serving tasks
 
-### Run Server
-
-```bash
-tensorflow_model_server --port=9000 --model_name=<model_name> --model_base_path=/client/<trained_model_path>
-```
-
-### Run Client
-
-> console, desktop program
-
-```bash
-# must use Python2 run the predict program since grpc still dosen't support Python3
-python /client/<predict.py> --<args>=... --server=localhost:9000
-```
-
-> web app
-
-```bash
-# must use Python2 run the predict program since grpc still dosen't support Python3
-python /client/<web_predict_host.py> --<args>=... --server=localhost:9000 --port=8080
-```
-
-### Example
-
-Take the tensorflow serving tutorial, [Serving a TensorFlow Model](https://www.tensorflow.org/serving/serving_basic) for example,
-This tutorial introduce how to serving a trained model through bazel build, but in this image the tensorflow serving installed using binary so the code needs a little bit of updates,
-see [baikangwang/MNIST](https://github.com/baikangwang/MNIST) for updated codes.
-
-#### Prerequisites
-```bash
-cd /
-git clone git@github.com:baikangwang/MNIST.git
-ls -lsa /MNIST
-```
-
-#### Create Container
-
-> Server
-
-```bash
-docker run -it -v /MNIST:/client -p 9000:9000 --name ts_server baikangwang/tensorflow_serving_cpu /bin/bash
-```
-
-> Client
-
-```bash
-docker run -it -v /MNIST:/client --name ts_client baikangwang/tensorflow_serving_cpu /bin/bash
-```
-
-#### Run
-
-> Server
-
-```bash
-tensorflow_model_server --port=9000 --model_name="mnist" --model_base_path="/client/models/"
-```
-
-![ts_server_example](ts_server_example.png)
-
-> Client
-
-```bash
-# Mac
-# https://docs.docker.com/docker-for-mac/networking/#known-limitations-use-cases-and-workarounds
-python2 /client/mnist_predict.py --num_tests=1000 --server=docker.for.mac.localhost:9000 --data_dir=/client/input_data
-
-# linux
-# https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach
-python2 /client/mnist_predict.py --num_tests=1000 --net="host" --server=localhost:9000 --data_dir=/client/input_data
-```
-
-![ts_client_example](ts_client_example.png)
-
-
+see [tensorflow_serving_tutorials](tensorflow_serving_tutorials.md)
