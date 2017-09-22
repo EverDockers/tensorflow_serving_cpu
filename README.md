@@ -1,7 +1,11 @@
 # Tensorflow serving (cpu)
 
 * repository
-    * [`baikangwang/tensorflow_serving_cpu`](https://hub.docker.com/r/baikangwang/tensorflow_serving_cpu/)
+    * [`baikangwang/tensorflow_serving_cpu`](https://hub.docker.com/r/baikangwang/tensorflow_serving_cpu/)  
+      ![Docker Automated buil](https://img.shields.io/docker/automated/baikangwang/tensorflow_serving_cpu.svg)
+      ![Docker Stars](https://img.shields.io/docker/stars/baikangwang/tensorflow_serving_cpu.svg)
+      ![Docker Pulls](https://img.shields.io/docker/pulls/baikangwang/tensorflow_serving_cpu.svg)
+      ![Docker Build Statu](https://img.shields.io/docker/build/baikangwang/tensorflow_serving_cpu.svg)
 * tags
     * [`3.5`,`latest`](#35latest)
     * [`2.7`](#27)
